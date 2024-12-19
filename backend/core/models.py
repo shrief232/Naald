@@ -163,7 +163,7 @@ class CartOrder(models.Model):
 class CartOrderItems(models.Model):
     order = models.ForeignKey(CartOrder, on_delete=models.CASCADE, related_name='items')
     invoice_no = models.CharField(max_length=100, default='DEFAULT_INVOICE')
-    product_status = models.CharField(max_length=20, default='Available')
+    product_status = models.CharField(max_length=20, default='pending')
     item = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
     item_title = models.CharField(max_length=255, default='Unknown Title')
     Item_title_ar = models.CharField(max_length=100, default="Fresh Pear")

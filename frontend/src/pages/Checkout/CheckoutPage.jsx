@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { Box, Table, TableBody, TableContainer, TableHead, Card, Button, Typography, Paper } from '@mui/material';
-// import OrdersTable from '../../components/Tables/OrdersTable';
+import { Box, Card, Button, Typography } from '@mui/material';
 import { cartState } from '../../Atoms/CartAtom';
 import CircularLoader from '../../components/Loader/CircularProgress';
 import { ACCESS_TOKEN } from '../../constants';
 import api from '../../api';
+import OrderTable from '../../components/Tables&Info/OrdersTable';
 
 export default function CheckoutPage() {
   const [cart, setCart] = useRecoilState(cartState || []);
   const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -18,6 +19,10 @@ export default function CheckoutPage() {
         try {
           const response = await api.get('/en/core/cart-order-items/');
           setCart(response.data);
+          const totalResponse = await api.get('/en/core/cart-order-total/', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setTotal(totalResponse.data.total);
         } catch (error) {
           console.error('Error fetching cart:', error);
         } finally {
@@ -30,10 +35,12 @@ export default function CheckoutPage() {
     fetchCart();
   }, [setCart]);
 
-  // Calculate the total amount safely
-  const totalAmount = Array.isArray(cart)
-    ? cart.reduce((acc, product) => acc + (product.total || 0), 0)
-    : 0;
+ 
+
+  const handlePayment = (method) => {
+    console.log(`Processing payment via ${method}`);
+    
+  };
 
   if (loading) {
     return (
@@ -45,32 +52,48 @@ export default function CheckoutPage() {
 
   return (
     <Box sx={{ display: 'flex', gap: 4, mt: '4rem', justifyContent: 'center' }}>
-      <Box>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="cart table">
-            <TableHead>
-              <Card sx={{ height: '50px', alignContent: 'center', ml: '10px' }}>
-                <Typography sx={{ padding: 1 }}>Cart Summary</Typography>
-              </Card>
-            </TableHead>
-            {/* <TableBody>
-              {cart.map((product) => (
-                <OrdersTable key={product.id} product={product} />
-              ))}
-            </TableBody> */}
-          </Table>
-        </TableContainer>
+      <Box sx={{ width: '70%' }}>
+        <OrderTable />
       </Box>
       <Box sx={{ width: '30%' }}>
         <Card>
           <Box sx={{ padding: '20px' }}>
-            {/* <Typography variant="h6">Total Amount</Typography>
-            <Typography>Subtotal: ${totalAmount.toFixed(2)}</Typography>
-            <Typography>Shipping Fee: $5.00</Typography>
-            <Typography>Total: ${(totalAmount + 5).toFixed(2)}</Typography> */}
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
-            <Button variant="contained" color="primary">Checkout</Button>
+            <Typography variant="h6" sx={{ marginBottom: '20px' }}>
+              Payment Methods
+            </Typography>
+            <Typography variant="body1" sx={{ marginBottom: '10px' }}>
+              Total Amount: ${total.toFixed(2)}
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handlePayment('Visa')}
+              >
+                Pay with Visa
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handlePayment('MasterCard')}
+              >
+                Pay with MasterCard
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handlePayment('PayPal')}
+              >
+                Pay with PayPal
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handlePayment('Vodafone Cash')}
+              >
+                Pay with Vodafone Cash
+              </Button>
+            </Box>
           </Box>
         </Card>
       </Box>

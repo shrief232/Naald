@@ -12,6 +12,7 @@ urlpatterns += i18n_patterns (
     path('admin/', admin.site.urls),
     path("api/", include("api.urls")),
     path("core/", include("core.urls")),
+    path('payments/', include('payments.urls')),
 )
 
 

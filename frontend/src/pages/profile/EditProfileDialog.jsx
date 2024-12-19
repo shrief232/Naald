@@ -14,6 +14,8 @@ const EditProfileDialog = ({ handleClose, profile, setProfile }) => {
   const [values, setValues] = useState({
     full_name: profile?.full_name || "",
     bio: profile?.bio || "",
+    address: profile?.address || "",
+    phone: profile?.phone || "",
     profile_image: null,
   });
   
@@ -30,6 +32,8 @@ const EditProfileDialog = ({ handleClose, profile, setProfile }) => {
       setValues({
         full_name: profile.full_name,
         bio: profile.bio,
+        address: profile.address,
+        phone: profile.phone,
         profile_image: null, 
       });
     }
@@ -61,6 +65,8 @@ const EditProfileDialog = ({ handleClose, profile, setProfile }) => {
     const formData = new FormData();
     formData.append("full_name", values.full_name);
     formData.append("bio", values.bio);
+    formData.append("address", values.address);
+    formData.append("phone", values.phone);
     if (values.profile_image) {
       formData.append("profile_image", values.profile_image);
     }
@@ -120,6 +126,24 @@ const EditProfileDialog = ({ handleClose, profile, setProfile }) => {
             label="Bio"
             name="bio"
             value={values.bio}
+            onChange={handleChange}
+            fullWidth
+            multiline
+            rows={3}
+          />
+          <TextField
+            label="Address"
+            name="address"
+            value={values.address}
+            onChange={handleChange}
+            fullWidth
+            multiline
+            rows={3}
+          />
+          <TextField
+            label="Phone"
+            name="phone"
+            value={values.phone}
             onChange={handleChange}
             fullWidth
             multiline

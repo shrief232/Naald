@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'api',
     'core',
     'parler',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -280,5 +281,9 @@ LOGGING = {
 
 # settings.py
 
+PAYPAL_CLIENT_ID ='ASR9fh2jhiZmb36yN4NbLnj5JQE6gFcdTvVC27phVw-FqtwteyuHfELVVPYGUwj2l9wnlOQn3P02lnkE'
+PAYPAL_CLIENT_SECRET = 'EPfmDiNb90x7i5cY1TDOb6WZURyfOmAoqQlP3yz-3xUzBvcpBXs1ywCBJKleTqw2wCessfh1n0xvKaOc'
+PAYPAL_MODE = 'sandbox'
 REACT_BASE_URL =  'http://localhost:3000'
+
 # os.getenv("REACT_BASE_URL",
